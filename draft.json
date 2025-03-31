@@ -1,0 +1,76 @@
+curl 'https://workbench.cloud.tencent.com/cgi/capi?i=cvm/StopInstances&uin=100038461096&region=ap-hongkong' \
+  -H 'accept: application/json, text/javascript, */*; q=0.01' \
+  -H 'accept-language: zh-CN,zh;q=0.9,en;q=0.8' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json; charset=UTF-8' \
+  -H 'cookie: qcloud_uid=FbxL-9EwURZ-; qcommunity_identify_id=j-ZEsylMVdBccIOtqTnIB; pgv_pvid=8041600619; _qimei_uuid42=18a0f11083b1000d14e55bc318adcbfb4b59042ad7; _qimei_fingerprint=1f1f0db4b2616bc374b5af33cfbf18f1; _qimei_q36=; _qimei_h38=ca209e9f14e55bc318adcbfb0300000ba18a0f; _ga_RPMZTEBERQ=GS1.1.1733882825.7.0.1733882860.0.0.0; _gcl_gs=2.1.k1$i1733973873$u203206467; _gcl_aw=GCL.1733974170.EAIaIQobChMIgbPC_KOhigMVf9lMAh3A3ixuEAAYASAAEgK4UvD_BwE; _ga=GA1.2.485820851.1718977761; _ga_6WSZ0YS5ZQ=GS1.1.1734505835.9.0.1734505845.0.0.0; _gcl_au=1.1.263285975.1734582746; mfaRMId=0873f60de1263bebc1d8973a95569c23; qcloud_visitId=b56c3abe960e42bb9cb5c2a4b1376c96; x_host_key_access_https=1cfa59686c15ed79b0f7e2752a0d30189f1df1f3_s; x-client-ssid=8f10b00b:01947323317f:111ebc; qcstats_seo_keywords=%E5%93%81%E7%89%8C%E8%AF%8D-%E5%93%81%E7%89%8C%E8%AF%8D-%E7%99%BB%E5%BD%95; qcmainCSRFToken=pLcNrd-Kb3; wework_outh2_state=ap3uspucfg; wedata_region_id=4; hy_user=a_1cd2f300a45cda1ae46a8c0b96fc6344; hy_token=viZ5Od4wZuEkVp6a2fr9o7cAQbBlQtP0JS3niQrKUgMS3l+j6w2hOrtUypRNAg5D1gn1SHRHgDEYGmbMFt9NVQ==; hy_source=web; language=zh; cn_en_tag=0; loginType=subaccount; qcloud_from=qcloud.inside.group-1739949596017; from=console_top_search; trafficParams=***%24%3Btimestamp%3D1740106776769%3Bfrom_type%3Dserver%3Btrack%3Dd3a32683-f285-4c9b-bb96-05dcb3151feb%3Bgclid%3DEAIaIQobChMIgbPC_KOhigMVf9lMAh3A3ixuEAAYASAAEgK4UvD_BwE%3Btrafficparams_cpskey%3D8d33e5fd3b3fc6c9779c18b9bbc680a0%3Bcps_time%3D1733973882647%3Bis_report%3Dyes%3B%24***; uin=o100038461096; tinyid=144115396995428162; skey=3QVLH8cnTkAqJfplFWKdIACgJytqw4alLSx4V8VeSCs_; subAccountLoginPage=https://cloud.tencent.com/login/subAccount/100037194712; intl=1; lastLoginIdentity=dc567a695653c6fed83e67ab15b63f60; refreshSession=1; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%22100038461096%22%2C%22first_id%22%3A%22194de61af46317-08de49beaee173-1e525636-2073600-194de61af471c3f%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E7%9B%B4%E6%8E%A5%E6%B5%81%E9%87%8F%22%7D%2C%22identities%22%3A%22eyIkaWRlbnRpdHlfY29va2llX2lkIjoiMTk0ZGU2MWFmNDYzMTctMDhkZTQ5YmVhZWUxNzMtMWU1MjU2MzYtMjA3MzYwMC0xOTRkZTYxYWY0NzFjM2YiLCIkaWRlbnRpdHlfbG9naW5faWQiOiIxMDAwMzg0NjEwOTYifQ%3D%3D%22%2C%22history_login_id%22%3A%7B%22name%22%3A%22%24identity_login_id%22%2C%22value%22%3A%22100038461096%22%7D%2C%22%24device_id%22%3A%22194de61af46317-08de49beaee173-1e525636-2073600-194de61af471c3f%22%7D; saas_synced_session=100038461096%7C3QVLH8cnTkAqJfplFWKdIACgJytqw4alLSx4V8VeSCs_; regionId=5; appid=1326936773; moduleId=1326936773; systemTimeGap=-43; ownerUin=O100037194712G; nick=emmitwang%40100037194712' \
+  -H 'origin: https://console.cloud.tencent.com' \
+  -H 'pragma: no-cache' \
+  -H 'priority: u=1, i' \
+  -H 'referer: https://console.cloud.tencent.com/cvm/instance/index?action=StopInstances&VpcId=vpc-5s5arikw&SubnetIds=subnet-fyrptihb&vpcId=vpc-5s5arikw&subnetIds=subnet-fyrptihb&rid=5' \
+  -H 'sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: same-site' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' \
+  -H 'x-csrfcode: 1465083349' \
+  -H 'x-lid: ByZl5G3H91l' \
+  -H 'x-life: 92323' \
+  -H 'x-referer: https://console.cloud.tencent.com/cvm/instance/index?action=StopInstances&VpcId=vpc-5s5arikw&SubnetIds=subnet-fyrptihb&vpcId=vpc-5s5arikw&subnetIds=subnet-fyrptihb&rid=5' \
+  -H 'x-seqid: 4d9649e1-979e-b405-3938-d7af8c63424c' \
+  --data-raw '{"serviceType":"cvm","action":"StopInstances","data":{"Version":"2017-03-12","InstanceIds":["ins-nkhxihms"],"StopType":"SOFT_FIRST","StoppedMode":"KEEP_CHARGING"},"region":"ap-hongkong"}'\
+
+
+
+
+  curl 'https://workbench.cloud.tencent.com/cgi/capi?i=cvm/CreateImage&uin=100038461096&region=ap-hongkong' \
+  -H 'accept: application/json, text/javascript, */*; q=0.01' \
+  -H 'accept-language: zh-CN,zh;q=0.9,en;q=0.8' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json; charset=UTF-8' \
+  -H 'cookie: dasd' \
+  -H 'origin: https://console.cloud.tencent.com' \
+  -H 'pragma: no-cache' \
+  -H 'priority: u=1, i' \
+  -H 'referer: https://console.cloud.tencent.com/cvm/instance/index?action=CreateImage&rid=5&ProjectId=0&pid=0' \
+  -H 'sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: same-site' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' \
+  -H 'x-csrfcode: 1511367916' \
+  -H 'x-lid: HkH5-5HiJe' \
+  -H 'x-life: 30973' \
+  -H 'x-referer: https://console.cloud.tencent.com/cvm/instance/index?action=CreateImage&rid=5&ProjectId=0&pid=0' \
+  -H 'x-seqid: bde2cec2-5ca8-bc77-3e47-fdea2cbb342b' \
+  --data-raw '{"serviceType":"cvm","action":"CreateImage","region":"ap-hongkong","data":{"Version":"2017-03-12","InstanceId":"ins-o0szgm0w","ImageName":"test-hhhh","ImageDescription":"hhhh","ForcePoweroff":"FALSE","Sysprep":"FALSE","DataDiskIds":["disk-ixis1e90","disk-mcmqy8py"]}}'
+
+
+
+  curl 'https://workbench.cloud.tencent.com/cgi/capi?i=cvm/DeleteImages&uin=100038461096&region=ap-hongkong' \
+  -H 'accept: application/json, text/javascript, */*; q=0.01' \
+  -H 'accept-language: zh-CN,zh;q=0.9,en;q=0.8' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/json; charset=UTF-8' \
+  -H 'cookie: qcloud_uid=FbxL-9EwURZ-; qcommunity_identify_id=j-ZEsylMVdBccIOtqTnIB; pgv_pvid=8041600619; _qimei_uuid42=18a0f11083b1000d14e55bc318adcbfb4b59042ad7; _qimei_q36=; _qimei_h38=ca209e9f14e55bc318adcbfb0300000ba18a0f; _gcl_gs=2.1.k1$i1733973873$u203206467; _gcl_aw=GCL.1733974170.EAIaIQobChMIgbPC_KOhigMVf9lMAh3A3ixuEAAYASAAEgK4UvD_BwE; _ga_6WSZ0YS5ZQ=GS1.1.1734505835.9.0.1734505845.0.0.0; _gcl_au=1.1.263285975.1734582746; mfaRMId=0873f60de1263bebc1d8973a95569c23; qcloud_visitId=b56c3abe960e42bb9cb5c2a4b1376c96; x_host_key_access_https=1cfa59686c15ed79b0f7e2752a0d30189f1df1f3_s; x-client-ssid=8f10b00b:01947323317f:111ebc; wework_outh2_state=ap3uspucfg; wedata_region_id=4; hy_user=a_1cd2f300a45cda1ae46a8c0b96fc6344; hy_token=viZ5Od4wZuEkVp6a2fr9o7cAQbBlQtP0JS3niQrKUgMS3l+j6w2hOrtUypRNAg5D1gn1SHRHgDEYGmbMFt9NVQ==; hy_source=web; qcstats_seo_keywords=%E5%93%81%E7%89%8C%E8%AF%8D-%E5%93%81%E7%89%8C%E8%AF%8D-%E7%99%BB%E5%BD%95; lastLoginIdentity=dc567a695653c6fed83e67ab15b63f60; qcmainCSRFToken=H1eXh8Ln5kx; _qimei_fingerprint=e83cf87c5a6f4e718a62811070e4ed3d; _ga_RPMZTEBERQ=GS1.1.1740563859.8.1.1740563881.0.0.0; language=zh; cn_en_tag=0; _ga=GA1.2.485820851.1718977761; DISTRIBUTION_MODE=1; qcloud_from=qcloud.google.seo-1740982508336; from_column=20421; refreshSession=1; regionId=5; from=25170; trafficParams=***%24%3Btimestamp%3D1741072193728%3Bfrom_type%3Dserver%3Btrack%3D9369a6b1-632c-4696-95b3-142c5e446050%3Bgclid%3DEAIaIQobChMIgbPC_KOhigMVf9lMAh3A3ixuEAAYASAAEgK4UvD_BwE%3Btrafficparams_cpskey%3D8d33e5fd3b3fc6c9779c18b9bbc680a0%3Bcps_time%3D1733973882647%3Bis_report%3Dyes%3B%24***; uin=o100038461096; tinyid=144115396995428162; skey=0ya*5AWqIPqW5dmhw5*8DJLe-EfUGqOuNfXOj2FM4BQ_; loginType=subaccount; subAccountLoginPage=https://cloud.tencent.com/login/subAccount; intl=1; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%22100038461096%22%2C%22first_id%22%3A%22194de61af46317-08de49beaee173-1e525636-2073600-194de61af471c3f%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E7%9B%B4%E6%8E%A5%E6%B5%81%E9%87%8F%22%7D%2C%22identities%22%3A%22eyIkaWRlbnRpdHlfY29va2llX2lkIjoiMTk0ZGU2MWFmNDYzMTctMDhkZTQ5YmVhZWUxNzMtMWU1MjU2MzYtMjA3MzYwMC0xOTRkZTYxYWY0NzFjM2YiLCIkaWRlbnRpdHlfbG9naW5faWQiOiIxMDAwMzg0NjEwOTYifQ%3D%3D%22%2C%22history_login_id%22%3A%7B%22name%22%3A%22%24identity_login_id%22%2C%22value%22%3A%22100038461096%22%7D%2C%22%24device_id%22%3A%22194de61af46317-08de49beaee173-1e525636-2073600-194de61af471c3f%22%7D; appid=1326936773; moduleId=1326936773; saas_synced_session=100038461096%7C0ya*5AWqIPqW5dmhw5*8DJLe-EfUGqOuNfXOj2FM4BQ_; systemTimeGap=-337; ownerUin=O100037194712G; nick=emmitwang%40100037194712' \
+  -H 'origin: https://console.cloud.tencent.com' \
+  -H 'pragma: no-cache' \
+  -H 'priority: u=1, i' \
+  -H 'referer: https://console.cloud.tencent.com/cvm/image/index?rid=5&tab=PRIVATE_IMAGE&imageType=PRIVATE_IMAGE&action=DeleteImages' \
+  -H 'sec-ch-ua: "Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "macOS"' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: same-site' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' \
+  -H 'x-csrfcode: 1511367916' \
+  -H 'x-lid: S1HKXjrj1e' \
+  -H 'x-life: 334105' \
+  -H 'x-referer: https://console.cloud.tencent.com/cvm/image/index?rid=5&tab=PRIVATE_IMAGE&imageType=PRIVATE_IMAGE&action=DeleteImages' \
+  -H 'x-seqid: 0263a0cd-ac78-220e-4bcf-0a6bdc40686c' \
+  --data-raw '{"serviceType":"cvm","action":"DeleteImages","data":{"Version":"2017-03-12","ImageIds":["img-3l0otgg6"],"DeleteBindedSnap":true},"region":"ap-hongkong"}'
