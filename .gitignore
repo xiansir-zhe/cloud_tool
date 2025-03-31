@@ -33,3 +33,8 @@ ENV/
 
 # 系统文件
 .DS_Store 
+
+# 自定义文件
+draft.json
+cvm_resource.csv
+tf_cvmBatchCreate/
