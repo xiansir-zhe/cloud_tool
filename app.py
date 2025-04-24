@@ -16,8 +16,17 @@ def load_instance_data(file_path):
 
 # 从请求中提取cookie
 def extract_cookie(request_text):
+    # 尝试从 -H 'cookie: ...' 格式提取
     match = re.search(r"-H 'cookie: ([^']*)'", request_text)
-    return match.group(1) if match else ''
+    if match:
+        return match.group(1)
+    
+    # 尝试从 -b '...' 格式提取
+    match = re.search(r"-b '([^']*)'", request_text)
+    if match:
+        return match.group(1)
+    
+    return ''
 
 # 从请求中提取x-csrfcode
 def extract_csrfcode(request_text):
@@ -202,6 +211,77 @@ def delete_snapshots(snapshot_data, cookie, csrfcode, uin):
 
 # Streamlit界面
 st.title("批量开关机、创建镜像和快照程序")
+
+# 添加使用说明
+with st.expander("📋 使用说明", expanded=True):
+    st.markdown("""
+    ### 文件上传要求
+
+    #### 1. 批量开关机文件 (CSV格式)
+    - 必须包含以下字段：
+        - `ID_cvm`: 云服务器实例ID（例如：ins-xxxxxx）
+    - 示例格式：
+        ```
+        ID_cvm
+        ins-xxxxxx
+        ins-yyyyyy
+        ```
+
+    #### 2. 批量创建镜像文件 (CSV格式)
+    - 必须包含以下字段：
+        - `ID_cvm`: 云服务器实例ID（例如：ins-xxxxxx）
+        - `cvm_name`: 云服务器名称（例如：test-server）
+        - `ID_dataDisk`: 数据盘ID（例如：disk-xxxxxx）
+    - 示例格式：
+        ```
+        ID_cvm,cvm_name,ID_dataDisk
+        ins-xxxxxx,test-server,disk-xxxxxx
+        ins-yyyyyy,prod-server,disk-yyyyyy
+        ```
+
+    #### 3. 批量删除镜像文件 (CSV格式)
+    - 必须包含以下字段：
+        - `ImageId`: 镜像ID（例如：img-xxxxxx）
+    - 示例格式：
+        ```
+        ImageId
+        img-xxxxxx
+        img-yyyyyy
+        ```
+
+    #### 4. 批量创建快照文件 (CSV格式)
+    - 必须包含以下字段：
+        - `ID`: 云硬盘ID（例如：disk-xxxxxx）
+    - 示例格式：
+        ```
+        ID
+        disk-xxxxxx
+        disk-yyyyyy
+        ```
+
+    #### 5. 批量删除快照文件 (CSV格式)
+    - 必须包含以下字段：
+        - `SnapshotId`: 快照ID（例如：snap-xxxxxx）
+    - 示例格式：
+        ```
+        SnapshotId
+        snap-xxxxxx
+        snap-yyyyyy
+        ```
+
+    ### 注意事项
+    1. 所有CSV文件必须使用UTF-8编码保存
+    2. 字段名称必须完全匹配上述要求，区分大小写
+    3. 删除操作需要输入正确的密码（安全措施）
+    4. 请确保所有ID都是有效的腾讯云资源ID
+    5. 批量开关机操作只需要云服务器实例ID，而创建镜像操作需要额外的云服务器名称和数据盘ID信息
+    
+    ### 操作流程
+    1. 输入完整的请求信息以提取Cookie和CSRF代码
+    2. 输入UIN和区域信息
+    3. 上传相应的CSV文件
+    4. 点击对应的操作按钮执行批量操作
+    """)
 
 # 输入完整的请求信息
 request_text = st.text_area("输入完整的请求信息以更新Cookie和CSRF代码", height=200)
