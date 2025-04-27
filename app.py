@@ -4,7 +4,33 @@ import requests
 import re
 import io
 import json
+import sys
+import traceback
 from database import init_db, verify_password  # 导入数据库初始化和验证函数
+
+# 在应用标题之前检查openpyxl状态，确保状态信息最先显示
+st.sidebar.title("环境状态")
+
+# 检查是否有openpyxl模块
+try:
+    import openpyxl
+    from openpyxl import Workbook
+    EXCEL_EXPORT_AVAILABLE = True
+    excel_version = openpyxl.__version__
+    st.sidebar.success(f"✅ openpyxl模块已加载: 版本 {excel_version}")
+except ImportError as e:
+    EXCEL_EXPORT_AVAILABLE = False
+    st.sidebar.error(f"❌ 无法导入openpyxl模块: {str(e)}")
+    st.sidebar.info("您可以通过运行 'pip install openpyxl' 来安装此模块")
+except Exception as e:
+    EXCEL_EXPORT_AVAILABLE = False
+    st.sidebar.error(f"❌ 加载openpyxl模块时出现未知错误: {str(e)}")
+    st.sidebar.info("Python路径: " + ", ".join(sys.path))
+
+# 显示Python环境信息
+st.sidebar.subheader("Python环境")
+st.sidebar.info(f"Python版本: {sys.version}")
+st.sidebar.info(f"Pandas版本: {pd.__version__}")
 
 # 初始化数据库
 init_db()
@@ -67,6 +93,10 @@ def send_request(action, data, cookie, csrfcode, uin, region=None):
 
 # 发送关机请求的函数
 def stop_instances(instance_ids, cookie, csrfcode, region, uin):
+    results = []  # 存储所有实例的关机结果
+    success_count = 0
+    fail_count = 0
+    
     for instance_id in instance_ids:
         data = {
             "serviceType": "cvm",
@@ -80,10 +110,94 @@ def stop_instances(instance_ids, cookie, csrfcode, region, uin):
             "region": region
         }
         response_json = send_request("StopInstances", data, cookie, csrfcode, uin, region)
-        st.write(f"Instance {instance_id} stop response: {response_json}")
+        
+        # 解析响应结果
+        status = "成功"
+        error_msg = ""
+        request_id = ""
+        full_response = json.dumps(response_json, ensure_ascii=False, indent=2)
+        
+        if 'data' in response_json and 'Response' in response_json['data']:
+            request_id = response_json['data']['Response'].get('RequestId', '')
+            if 'Error' in response_json['data']['Response']:
+                status = "失败"
+                error_msg = response_json['data']['Response']['Error'].get('Message', '未知错误')
+                fail_count += 1
+            else:
+                success_count += 1
+        else:
+            status = "失败"
+            error_msg = "无效的响应格式"
+            fail_count += 1
+        
+        # 记录结果
+        results.append({
+            "实例ID": instance_id,
+            "状态": status,
+            "错误信息": error_msg,
+            "请求ID": request_id,
+            "时间": pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")
+        })
+        
+        # 在界面显示详细信息
+        st.subheader(f"实例 {instance_id} 关机请求结果")
+        st.write(f"状态: {status}")
+        st.write(f"请求ID: {request_id}")
+        if error_msg:
+            st.error(f"错误信息: {error_msg}")
+        st.json(full_response)
+    
+    # 创建结果DataFrame
+    results_df = pd.DataFrame(results)
+    
+    # 在界面上显示结果统计
+    st.subheader("关机操作结果统计")
+    st.write(f"总计: {len(instance_ids)} 台实例")
+    st.write(f"成功: {success_count} 台")
+    st.write(f"失败: {fail_count} 台")
+    
+    # 显示详细结果表格
+    st.subheader("详细结果")
+    st.dataframe(results_df)
+    
+    # 提供CSV下载
+    csv = results_df.to_csv(index=False)
+    st.download_button(
+        label="下载关机结果报告(CSV)",
+        data=csv,
+        file_name=f"关机结果_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.csv",
+        mime="text/csv"
+    )
+    
+    # 提供Excel下载，如果支持的话
+    if EXCEL_EXPORT_AVAILABLE:
+        try:
+            excel_buffer = io.BytesIO()
+            results_df.to_excel(excel_buffer, engine='openpyxl', index=False, sheet_name="关机结果")
+            excel_data = excel_buffer.getvalue()
+            
+            st.download_button(
+                label="下载关机结果报告(Excel)",
+                data=excel_data,
+                file_name=f"关机结果_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+        except Exception as e:
+            st.error(f"Excel导出错误: {str(e)}")
+            st.info("错误类型: " + str(type(e).__name__))
+            st.code(traceback.format_exc())
+            st.warning("请使用CSV格式导出，或者检查openpyxl安装。")
+    else:
+        st.info("Excel导出功能不可用。请确保openpyxl库已正确安装且可被当前Python环境访问。")
+    
+    return results_df
 
 # 发送开机请求的函数
 def start_instances(instance_ids, cookie, csrfcode, region, uin):
+    results = []  # 存储所有实例的开机结果
+    success_count = 0
+    fail_count = 0
+    
     for instance_id in instance_ids:
         data = {
             "serviceType": "cvm",
@@ -95,7 +209,87 @@ def start_instances(instance_ids, cookie, csrfcode, region, uin):
             "region": region
         }
         response_json = send_request("StartInstances", data, cookie, csrfcode, uin, region)
-        st.write(f"Instance {instance_id} start response: {response_json}")
+        
+        # 解析响应结果
+        status = "成功"
+        error_msg = ""
+        request_id = ""
+        full_response = json.dumps(response_json, ensure_ascii=False, indent=2)
+        
+        if 'data' in response_json and 'Response' in response_json['data']:
+            request_id = response_json['data']['Response'].get('RequestId', '')
+            if 'Error' in response_json['data']['Response']:
+                status = "失败"
+                error_msg = response_json['data']['Response']['Error'].get('Message', '未知错误')
+                fail_count += 1
+            else:
+                success_count += 1
+        else:
+            status = "失败"
+            error_msg = "无效的响应格式"
+            fail_count += 1
+        
+        # 记录结果
+        results.append({
+            "实例ID": instance_id,
+            "状态": status,
+            "错误信息": error_msg,
+            "请求ID": request_id,
+            "时间": pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S")
+        })
+        
+        # 在界面显示详细信息
+        st.subheader(f"实例 {instance_id} 开机请求结果")
+        st.write(f"状态: {status}")
+        st.write(f"请求ID: {request_id}")
+        if error_msg:
+            st.error(f"错误信息: {error_msg}")
+        st.json(full_response)
+    
+    # 创建结果DataFrame
+    results_df = pd.DataFrame(results)
+    
+    # 在界面上显示结果统计
+    st.subheader("开机操作结果统计")
+    st.write(f"总计: {len(instance_ids)} 台实例")
+    st.write(f"成功: {success_count} 台")
+    st.write(f"失败: {fail_count} 台")
+    
+    # 显示详细结果表格
+    st.subheader("详细结果")
+    st.dataframe(results_df)
+    
+    # 提供CSV下载
+    csv = results_df.to_csv(index=False)
+    st.download_button(
+        label="下载开机结果报告(CSV)",
+        data=csv,
+        file_name=f"开机结果_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.csv",
+        mime="text/csv"
+    )
+    
+    # 提供Excel下载，如果支持的话
+    if EXCEL_EXPORT_AVAILABLE:
+        try:
+            excel_buffer = io.BytesIO()
+            results_df.to_excel(excel_buffer, engine='openpyxl', index=False, sheet_name="开机结果")
+            excel_data = excel_buffer.getvalue()
+            
+            st.download_button(
+                label="下载开机结果报告(Excel)",
+                data=excel_data,
+                file_name=f"开机结果_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+        except Exception as e:
+            st.error(f"Excel导出错误: {str(e)}")
+            st.info("错误类型: " + str(type(e).__name__))
+            st.code(traceback.format_exc())
+            st.warning("请使用CSV格式导出，或者检查openpyxl安装。")
+    else:
+        st.info("Excel导出功能不可用。请确保openpyxl库已正确安装且可被当前Python环境访问。")
+    
+    return results_df
 
 # 发送创建镜像请求的函数
 def create_images(data, cookie, csrfcode, region, uin):
@@ -118,13 +312,21 @@ def create_images(data, cookie, csrfcode, region, uin):
             }
         }
         response_json = send_request("CreateImage", data, cookie, csrfcode, uin, region)
-        st.write(f"Create image for instance {instance_id} response: {response_json}")
+        
+        # 显示详细信息
+        st.subheader(f"为实例 {instance_id} 创建镜像结果")
+        st.json(json.dumps(response_json, ensure_ascii=False, indent=2))
         
         # 提取 ImageId 并添加到列表
         if 'data' in response_json and 'Response' in response_json['data']:
             image_id = response_json['data']['Response'].get('ImageId')
             if image_id:
                 image_ids.append({'InstanceId': instance_id, 'ImageId': image_id})
+                st.success(f"成功创建镜像，ImageId: {image_id}")
+            else:
+                st.error("未获取到 ImageId")
+        else:
+            st.error("响应格式无效")
 
     # 将 ImageId 列表转换为 DataFrame
     if image_ids:
@@ -153,7 +355,16 @@ def delete_images(image_ids, cookie, csrfcode, region, uin):
             }
         }
         response_json = send_request("DeleteImages", data, cookie, csrfcode, uin, region)
-        st.write(f"Delete image {image_id} response: {response_json}")
+        
+        # 显示详细信息
+        st.subheader(f"删除镜像 {image_id} 结果")
+        st.json(json.dumps(response_json, ensure_ascii=False, indent=2))
+        
+        if 'data' in response_json and 'Response' in response_json['data']:
+            if 'Error' in response_json['data']['Response']:
+                st.error(f"删除失败: {response_json['data']['Response']['Error'].get('Message', '未知错误')}")
+            else:
+                st.success("删除成功")
 
 # 发送创建快照请求的函数
 def create_snapshots(disk_data, cookie, csrfcode, uin):
@@ -172,13 +383,21 @@ def create_snapshots(disk_data, cookie, csrfcode, uin):
             }
         }
         response_json = send_request("CreateSnapshot", data, cookie, csrfcode, uin)
-        st.write(f"Create snapshot for disk {disk_id} response: {response_json}")
+        
+        # 显示详细信息
+        st.subheader(f"为磁盘 {disk_id} 创建快照结果")
+        st.json(json.dumps(response_json, ensure_ascii=False, indent=2))
         
         # 提取 SnapshotId 并添加到列表
         if 'data' in response_json and 'Response' in response_json['data']:
             snapshot_id = response_json['data']['Response'].get('SnapshotId')
             if snapshot_id:
                 snapshot_info.append({'DiskId': disk_id, 'SnapshotId': snapshot_id})
+                st.success(f"成功创建快照，SnapshotId: {snapshot_id}")
+            else:
+                st.error("未获取到 SnapshotId")
+        else:
+            st.error("响应格式无效")
 
     # 将 Snapshot 信息列表转换为 DataFrame
     if snapshot_info:
@@ -207,7 +426,16 @@ def delete_snapshots(snapshot_data, cookie, csrfcode, uin):
             }
         }
         response_json = send_request("DeleteSnapshots", data, cookie, csrfcode, uin)
-        st.write(f"Delete snapshot {snapshot_id} response: {response_json}")
+        
+        # 显示详细信息
+        st.subheader(f"删除快照 {snapshot_id} 结果")
+        st.json(json.dumps(response_json, ensure_ascii=False, indent=2))
+        
+        if 'data' in response_json and 'Response' in response_json['data']:
+            if 'Error' in response_json['data']['Response']:
+                st.error(f"删除失败: {response_json['data']['Response']['Error'].get('Message', '未知错误')}")
+            else:
+                st.success("删除成功")
 
 # Streamlit界面
 st.title("批量开关机、创建镜像和快照程序")
@@ -313,9 +541,13 @@ delete_snapshot_file = st.file_uploader("上传包含 SnapshotId 的 CSV 文件�
 if uploaded_file is not None:
     data = load_instance_data(uploaded_file)
     if st.button("执行关机"):
-        stop_instances(data['ID_cvm'].unique(), cookie, csrfcode, region, uin)
+        results_df = stop_instances(data['ID_cvm'].unique(), cookie, csrfcode, region, uin)
+        # 将结果保存到会话状态，以便可能的后续使用
+        st.session_state.last_stop_results = results_df
     if st.button("执行开机"):
-        start_instances(data['ID_cvm'].unique(), cookie, csrfcode, region, uin)
+        results_df = start_instances(data['ID_cvm'].unique(), cookie, csrfcode, region, uin)
+        # 将结果保存到会话状态，以便可能的后续使用
+        st.session_state.last_start_results = results_df
     if st.button("创建镜像"):
         create_images(data, cookie, csrfcode, region, uin)
 
